@@ -1,3 +1,4 @@
+[Volver a Readme](https://asimov.cncps.gob.ar/cpaez/prod_nominal)
 # Queries – Base Alimentar (ddbb_alimentar)
 
 Objetivo: obtener métricas simples de volumen, unicidad y relacionabilidad entre **titulares** y **menores** (clave: **CUIL**).
