@@ -2,7 +2,7 @@
 
 # Queries – Base Educación (ddbb_educacion)
 
-Objetivo: replicar la lógica aplicada en **Alimentar** para medir **volumen**, **unicidad** y **relacionabilidad**, usando como unidad de persona el **CUIL/CUIT**.
+Objetivo: obtener métricas simples de volumen, unicidad y relacionabilidad (clave: CUIL).
 
 ---
 
