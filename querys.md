@@ -115,17 +115,3 @@ where s.cuil is not null and btrim(s.cuil) <> ''
 ```
 **Qué muestra:** brecha del padrón lógico respecto a los eventos (si da >0, el padrón está incompleto).
 
----
-
-## Opcional (si querés auditar outliers)
-
-### O.1 Top CUIL con más eventos
-```sql
-select cuil, count(*) as eventos_por_persona
-from ddbb_stess.stess_202509
-where cuil is not null and btrim(cuil) <> ''
-group by cuil
-order by eventos_por_persona desc
-limit 20;
-```
-**Qué muestra:** casos extremos de recurrencia (útil para detectar duplicaciones o patrones administrativos).
