@@ -1,3 +1,5 @@
 # prod_nominal
 
-Análisis de la base
+Repo con la documentación de la base prod_nominal.
+
+- Estructura de la base 
