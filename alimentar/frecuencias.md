@@ -48,14 +48,6 @@
 - Menores sin titular asociado: **0**
 - Menores con titular inexistente: **0**
 
-### Distribución de menores por titular
-- Promedio: **1,76**
-- Mínimo: **1**
-- Mediana (p50): **1**
-- Percentil 90: **3**
-- Percentil 99: **5**
-- Máximo observado: **13**
-
 ### Evaluación
 - Relación totalmente consistente (sin orfandades).
 - Distribución esperable y estable.
