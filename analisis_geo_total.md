@@ -12,17 +12,16 @@ Fecha de generación: 2026-02-27
 
 Total de registros: 11.354.665
 
-Cobertura: - Provincia informada: 6.948.319 - Localidad informada:
-6.948.261 - Calle informada: 6.948.242 - Altura informada: 6.904.331 -
-Código postal informado: 6.948.286 - Domicilio completo (provincia +
-localidad + calle + altura): 6.904.311
+Cobertura:
 
-Interpretación: El esquema ALIMENTAR presenta alta completitud
-territorial en sus tablas principales (titulares y unidades de
-convivencia). La diferencia entre calle informada y altura informada es
-marginal, lo que indica consistencia estructural en la captura del
-domicilio. Es la fuente con mayor aporte efectivo de domicilios
-estructurados.
+- Provincia informada: 6.948.319 
+- Localidad informada: 6.948.261 
+- Calle informada: 6.948.242 
+- Altura informada: 6.904.331 
+- Código postal informado: 6.948.286 
+- Domicilio completo (provincia + localidad + calle + altura): 6.904.311
+
+Interpretación: El esquema ALIMENTAR presenta alta completitud territorial en sus tablas principales (titulares y unidades de convivencia). La diferencia entre calle informada y altura informada es marginal, lo que indica consistencia estructural en la captura del domicilio. Es la fuente con mayor aporte efectivo de domicilios estructurados.
 
 ------------------------------------------------------------------------
 
@@ -30,15 +29,16 @@ estructurados.
 
 Total de registros: 1.373.998
 
-Cobertura: - Provincia informada: 35.979 - Municipio/Partido informado:
-35.979 - Localidad informada: 35.979 - Calle informada: 35.979 - Altura
-informada: 35.973 - Domicilio completo: 35.973
+Cobertura:
 
-Interpretación: El volumen con información geográfica es
-significativamente menor en relación al total del esquema. La cobertura
-territorial se concentra exclusivamente en las tablas de becas, lo que
-implica que el esquema EDUCACIÓN aporta geografía solo para una fracción
-reducida del universo nominal.
+- Provincia informada: 35.979 
+- Municiio/Partido informado: 35.979 
+- Localidad informada: 35.979 
+- Calle informada: 35.979 
+- Altura informada: 35.973 
+- Domicilio completo: 35.973
+
+Interpretación: El volumen con información geográfica es significativamente menor en relación al total del esquema. La cobertura territorial se concentra exclusivamente en las tablas de becas, lo que implica que el esquema EDUCACIÓN aporta geografía solo para una fracción reducida del universo nominal.
 
 ------------------------------------------------------------------------
 
@@ -46,14 +46,15 @@ reducida del universo nominal.
 
 Total de registros: 2.584.425
 
-Cobertura: - Provincia informada: 1.037.647 - Municipio informado:
-799.422 - Localidad informada: 695.812 - Domicilio (texto libre):
-673.282 - Domicilio completo (según regla adaptada a STESS): 570.282
+Cobertura: 
 
-Interpretación: STESS aporta volumen significativo de datos provinciales
-y municipales, aunque con menor estructura de domicilio. El campo
-domicilio es texto libre y no desagregado en calle/altura, lo que limita
-la granularidad analítica respecto de ALIMENTAR.
+- Provincia informada: 1.037.647 
+- Municipio informado: 799.422 
+- Localidad informada: 695.812 
+- Domicilio (texto libre): 673.282 
+- Domicilio completo (según regla adaptada a STESS): 570.282
+
+Interpretación: STESS aporta volumen significativo de datos provinciales y municipales, aunque con menor estructura de domicilio. El campo domicilio es texto libre y no desagregado en calle/altura, lo que limita la granularidad analítica respecto de ALIMENTAR.
 
 ------------------------------------------------------------------------
 
@@ -69,10 +70,7 @@ Total de CUIL únicos: 8.758.568
 -   CUIL con localidad informada: 7.377.996
 -   CUIL con domicilio estructurado: 6.884.715
 
-Interpretación: El 86,9% del universo único posee al menos provincia
-informada. El 78,6% posee localidad. El 78,6% posee domicilio
-estructurado. El municipio presenta cobertura significativamente menor,
-lo que responde a la heterogeneidad estructural entre esquemas.
+Interpretación: El 86,9% del universo único posee al menos provincia informada. El 78,6% posee localidad. El 78,6% posee domicilio estructurado. El municipio presenta cobertura significativamente menor, lo que responde a la heterogeneidad estructural entre esquemas.
 
 ------------------------------------------------------------------------
 
@@ -84,9 +82,7 @@ lo que responde a la heterogeneidad estructural entre esquemas.
 -   1 provincia: 7.581.038
 -   2 provincias: 35.314
 
-Interpretación: La gran mayoría de los CUIL presentan una única
-provincia declarada. El 0,4% presenta dos provincias distintas, lo que
-sugiere movilidad o inconsistencias inter-fuente.
+Interpretación: La gran mayoría de los CUIL presentan una única provincia declarada. El 0,4% presenta dos provincias distintas, lo que sugiere movilidad o inconsistencias inter-fuente.
 
 ------------------------------------------------------------------------
 
@@ -97,8 +93,7 @@ sugiere movilidad o inconsistencias inter-fuente.
 -   2 localidades: 113.024
 -   3 o más: 4
 
-Interpretación: Existe un 1,3% del universo con más de una localidad
-asociada. Los casos con 3 o más localidades son marginales.
+Interpretación: Existe un 1,3% del universo con más de una localidad asociada. Los casos con 3 o más localidades son marginales.
 
 ------------------------------------------------------------------------
 
@@ -109,10 +104,7 @@ asociada. Los casos con 3 o más localidades son marginales.
 -   2 domicilios: 11.650
 -   3 o más: 12
 
-Interpretación: La mayoría de los individuos con información
-estructurada presentan un único domicilio. Los casos con múltiples
-domicilios son excepcionales y potencialmente vinculados a actualización
-temporal o divergencias entre esquemas.
+Interpretación: La mayoría de los individuos con información estructurada presentan un único domicilio. Los casos con múltiples domicilios son excepcionales y potencialmente vinculados a actualización temporal o divergencias entre esquemas.
 
 ------------------------------------------------------------------------
 
@@ -129,6 +121,8 @@ temporal o divergencias entre esquemas.
 5.  Las inconsistencias territoriales son marginales en términos
     porcentuales.
 
-Este análisis permite: - Evaluar calidad territorial por esquema. -
-Identificar conflictos inter-fuente. - Determinar nivel máximo de
-desagregación publicable con respaldo empírico.
+Este análisis permite: 
+
+- Evaluar calidad territorial por esquema. 
+- Identificar conflictos inter-fuente. 
+- Determinar nivel máximo de desagregación publicable con respaldo empírico.
