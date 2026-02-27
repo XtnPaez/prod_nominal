@@ -6,9 +6,9 @@ Fecha de generación: 2026-02-27
 
 ------------------------------------------------------------------------
 
-# 1. Cobertura Geográfica por Esquema
+## 1. Cobertura Geográfica por Esquema
 
-## 1.1 ddbb_alimentar
+### 1.1 ddbb_alimentar
 
 Total de registros: 11.354.665
 
@@ -25,7 +25,7 @@ Interpretación: El esquema ALIMENTAR presenta alta completitud territorial en s
 
 ------------------------------------------------------------------------
 
-## 1.2 ddbb_educacion
+### 1.2 ddbb_educacion
 
 Total de registros: 1.373.998
 
@@ -42,7 +42,7 @@ Interpretación: El volumen con información geográfica es significativamente m
 
 ------------------------------------------------------------------------
 
-## 1.3 ddbb_stess
+### 1.3 ddbb_stess
 
 Total de registros: 2.584.425
 
@@ -58,11 +58,11 @@ Interpretación: STESS aporta volumen significativo de datos provinciales y muni
 
 ------------------------------------------------------------------------
 
-# 2. Universo Único por CUIL
+## 2. Universo Único por CUIL
 
 Total de CUIL únicos: 8.758.568
 
-## 2.1 Cobertura general
+### 2.1 Cobertura general
 
 -   CUIL con algún dato geográfico: 7.616.352
 -   CUIL con provincia informada: 7.616.352
@@ -74,9 +74,9 @@ Interpretación: El 86,9% del universo único posee al menos provincia informada
 
 ------------------------------------------------------------------------
 
-# 3. Consistencia Territorial (Valores Distintos por CUIL)
+## 3. Consistencia Territorial (Valores Distintos por CUIL)
 
-## 3.1 Provincias distintas por CUIL
+### 3.1 Provincias distintas por CUIL
 
 -   0 provincias: 1.142.216
 -   1 provincia: 7.581.038
@@ -86,7 +86,7 @@ Interpretación: La gran mayoría de los CUIL presentan una única provincia dec
 
 ------------------------------------------------------------------------
 
-## 3.2 Localidades distintas por CUIL
+### 3.2 Localidades distintas por CUIL
 
 -   0 localidades: 1.380.572
 -   1 localidad: 7.264.968
@@ -97,7 +97,7 @@ Interpretación: Existe un 1,3% del universo con más de una localidad asociada.
 
 ------------------------------------------------------------------------
 
-## 3.3 Domicilios distintos por CUIL
+### 3.3 Domicilios distintos por CUIL
 
 -   0 domicilios: 1.873.853
 -   1 domicilio: 6.873.053
@@ -108,7 +108,7 @@ Interpretación: La mayoría de los individuos con información estructurada pre
 
 ------------------------------------------------------------------------
 
-# 4. Conclusiones Generales
+## 4. Conclusiones Generales
 
 1.  ALIMENTAR es la principal fuente de domicilios estructurados.
 2.  STESS aporta volumen provincial y municipal relevante, pero con
