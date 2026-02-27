@@ -6,3 +6,4 @@ Repo con la documentación de la base prod_nominal.
 - [Análisis y querys de las tablas de Alimentar](https://asimov.cncps.gob.ar/cpaez/prod_nominal/src/master/alimentar)
 - [Análisis y querys de las tablas de Educacion](https://asimov.cncps.gob.ar/cpaez/prod_nominal/src/master/educacion)
 - [Análisis y querys de las tablas de stess](https://asimov.cncps.gob.ar/cpaez/prod_nominal/src/master/stess)
+- [Análisis de los datos GEO - CUIL único](https://asimov.cncps.gob.ar/cpaez/prod_nominal/_edit/master/analisis_geo_total.md)
