@@ -23,22 +23,22 @@ Orden recomendado:
 ## Estructura del repositorio
 
 ├── README.md
-├── general/
+├── general
 │   ├── overview.md
 │   ├── claves_transversales.md
 │   ├── patrones_detectados.md
 │   ├── riesgos_y_alertas.md
 │   └── roadmap_analisis.md
-├── glosario/
+├── glosario
 │   ├── criterios.md
 │   ├── tipos_de_tabla.md
 │   └── claves_y_joins.md
-├── templates/
+├── templates
 │   ├── template_esquema.md
 │   └── template_tabla.md
-├── tools/
+├── tools
 │   └── validador_repo.py
-└── esquemas/
+└── esquemas
     ├── ddbb_alimentar/
     ├── ddbb_anses/
     ├── ddbb_niñez/
