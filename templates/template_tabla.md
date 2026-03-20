@@ -1,75 +1,98 @@
-# TABLA: <nombre_tabla>
+# Plantilla de análisis de tabla
 
-## Esquema
-<nombre_esquema>
+## Tabla
+`<schema>.<tabla>`
 
-## Tipo de tabla
-- [ ] nominal
-- [ ] relación
-- [ ] serie
-- [ ] staging
-- [ ] referencia
+## Tipo
+- Persona nominal directa / Relaciones / Eventos-prestaciones / Catálogo-dimensión
 
-## Descripción
-Qué representa cada fila.
+## Descripción operativa
+Breve explicación de qué registra la tabla y para qué parece haber sido diseñada.
 
-## Granularidad
-Unidad de registro:
-- persona
-- beneficio
-- evento
-- grupo familiar
-- otro:
+## Campos relevantes
+| campo | tipo | rol analítico |
+|---|---|---|
+| | | |
 
-## Clave primaria (técnica)
-- campo/s:
-- tipo:
-- observaciones:
+## Eje A. Identidad
+### Identificadores presentes
+- CUIL/CUIT:
+- DNI:
+- Otras claves:
 
-## Clave operativa (real)
-- campo/s:
-- nivel de confianza: alto / medio / bajo
-- problemas detectados:
+### Evaluación
+- Completitud:
+- Calidad esperable:
+- Riesgos:
+- Nivel de confianza: Alto / Medio / Bajo
 
-## Campos clave
-### Identificación
-- cuit/cuil:
-- dni:
-- nombre:
-- apellido:
+## Eje B. Atributos personales
+- Nombre / apellido:
+- Sexo:
+- Fecha de nacimiento:
+- Otros atributos:
 
-### Otros relevantes
-- ...
+### Evaluación
+- Consistencia esperable:
+- Problemas potenciales:
+- Nivel de confianza: Alto / Medio / Bajo
 
-## Campos para join
-| campo | posible destino | calidad |
-|------|----------------|--------|
-|      |                |        |
+## Eje C. Relaciones
+- Claves de vínculo:
+- Cardinalidad esperada:
+- Cardinalidad probable:
+- Posibles joins:
 
-## Calidad de datos
-- nulos:
-- duplicados:
-- inconsistencias:
-- formatos raros:
+### Evaluación
+- Fortaleza relacional:
+- Riesgos:
+- Nivel de integrabilidad: Alto / Medio / Bajo
 
-## Relaciones
-- FK explícitas:
-- relaciones inferidas:
+## Eje D. Eventos / prestaciones
+- ¿Registra eventos?:
+- Tipo de evento:
+- Variables temporales:
+- Variables monetarias o de estado:
 
-## Uso recomendado
-Para qué sirve esta tabla:
-- [ ] padrón base
-- [ ] enriquecimiento
-- [ ] validación
-- [ ] descartar
+### Evaluación
+- Trazabilidad temporal:
+- Utilidad analítica:
+
+## Eje E. Geografía
+### Campos geográficos disponibles
+- Provincia:
+- Departamento / municipio:
+- Localidad:
+- Código postal:
+- Calle:
+- Número:
+- Piso / depto:
+- Otros:
+
+### Calidad geográfica
+- Estructurado / texto libre:
+- Granularidad:
+- Consistencia interna esperable:
+- Potencial de geolocalización: Alta / Media / Baja / Nula
+
+## Calidad de datos esperable
+- Nulls críticos:
+- Duplicados:
+- Formatos inválidos:
+- Inconsistencias internas:
+
+## Valor para el registro único de personas
+Explicación breve del aporte concreto de la tabla al modelo PERSONA.
+
+## Decisión analítica
+- Prioridad: Alta / Media / Baja
+- Usar como: fuente principal / fuente complementaria / fuente de relación / fuente de eventos / catálogo
+- Requiere normalización previa: Sí / No
+
+## Queries sugeridas
+```sql
+-- completar
+```
 
 ## Observaciones
-Libre. Acá pensás.
-
-## Queries asociadas
-Referencia a queries en `04_queries_base.md` o específicas.
-
-## Pendientes
-- [ ] validar clave operativa
-- [ ] chequear duplicados
-- [ ] evaluar join con ...
+Notas libres.
