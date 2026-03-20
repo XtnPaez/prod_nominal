@@ -1,0 +1,28 @@
+VALIDADOR DEL REPO
+
+Archivo:
+- validador_repo.py
+
+Uso básico:
+1. Abrí una terminal en la carpeta donde está el repo
+2. Ejecutá:
+   python validador_repo.py .
+
+Uso estricto:
+   python validador_repo.py . --strict
+
+Salida JSON:
+   python validador_repo.py . --json
+
+Qué controla:
+- README.md en raíz
+- carpeta templates/
+- templates obligatorios
+- carpeta esquemas/
+- archivos obligatorios por esquema
+- README.md fuera de raíz
+- opcionalmente, archivos md vacíos o casi vacíos
+
+Código de salida:
+- 0 = OK
+- 1 = hay errores

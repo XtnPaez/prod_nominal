@@ -1,4 +1,4 @@
-# prod_nominal – Análisis de Esquemas y Datos Nominales
+# PROD_NOMINAL – Análisis de Esquemas y Datos Nominales
 
 ## Propósito
 
@@ -12,38 +12,48 @@ El objetivo es identificar, evaluar y explotar fuentes de datos para construir u
 
 Orden recomendado:
 
-1. general/overview.md  
-2. general/claves_transversales.md  
-3. esquemas/<schema>/<schema>.md  
-4. 02_tablas_clave.md  
-5. 05_hallazgos.md  
+1. general/overview.md
+2. general/claves_transversales.md
+3. esquemas/<schema>/<schema>.md
+4. esquemas/<schema>/tablas_clave.md
+5. esquemas/<schema>/hallazgos.md
 
 ---
 
 ## Estructura del repositorio
 
+```
+/
 ├── README.md
-├── general
+├── general/
 │   ├── overview.md
 │   ├── claves_transversales.md
 │   ├── patrones_detectados.md
 │   ├── riesgos_y_alertas.md
 │   └── roadmap_analisis.md
-├── glosario
+├── glosario/
 │   ├── criterios.md
 │   ├── tipos_de_tabla.md
 │   └── claves_y_joins.md
-├── templates
+├── templates/
 │   ├── template_esquema.md
 │   └── template_tabla.md
-├── tools
+├── tools/
 │   └── validador_repo.py
-└── esquemas
+└── esquemas/
     ├── ddbb_alimentar/
+    │   ├── ddbb_alimentar.md
+    │   ├── estructura.md
+    │   ├── tablas_clave.md
+    │   ├── relaciones.md
+    │   ├── queries.md
+    │   ├── hallazgos.md
+    │   └── pendientes.md
     ├── ddbb_anses/
     ├── ddbb_niñez/
     ├── ddbb_educacion/
     └── ddbb_stess/
+```
 
 ---
 
@@ -96,9 +106,10 @@ python tools/validador_repo.py . --strict
 
 ## Convenciones
 
-- No se utilizan README.md dentro de subcarpetas
+- Solo existe README.md en la raíz
 - Cada esquema tiene un archivo principal con su nombre:
   esquemas/<schema>/<schema>.md
+- No usar prefijos numéricos en archivos
 - Un archivo = una función
 
 ---
