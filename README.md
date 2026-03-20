@@ -1,138 +1,136 @@
-# PROD_NOMINAL – Análisis de Esquemas y Datos Nominales
+# Proyecto de análisis geográfico de bases nominales
 
 ## Propósito
 
-Este repositorio documenta la estructura, calidad y potencial de integración de distintos esquemas de base de datos nominales.
+Este repositorio se enfoca exclusivamente en el análisis geográfico de bases nominales.
 
-El objetivo es identificar, evaluar y explotar fuentes de datos para construir un padrón único de personas, utilizando CUIT/CUIL como clave principal de cruce.
+El objetivo no es estudiar integralmente cada esquema ni modelar la persona en todos sus atributos, sino responder tres preguntas operativas:
 
----
+1. qué tablas tienen datos geográficos y cuáles no
+2. si esos datos geográficos están codificados, parcialmente codificados o en texto libre
+3. si para cada CUIL/CUIT se puede obtener una dirección, una localización aproximada o múltiples domicilios
 
-## Cómo leer este repositorio
+## Preguntas rectoras
 
-Orden recomendado:
+Toda tabla debe analizarse desde estas preguntas:
 
-1. general/overview.md
-2. general/claves_transversales.md
-3. esquemas/<schema>/<schema>.md
-4. esquemas/<schema>/tablas_clave.md
-5. esquemas/<schema>/hallazgos.md
+- ¿Tiene campos geográficos?
+- ¿Qué tipo de geografía aporta?
+- ¿La geografía está codificada o no?
+- ¿El dato sirve para georreferenciar personas?
+- ¿La unidad identificable es persona, hogar, prestación o establecimiento?
+- ¿Se puede vincular un CUIL/CUIT con una dirección?
+- ¿Puede haber más de una dirección por CUIL/CUIT?
 
----
+## Alcance
 
-## Estructura del repositorio
+Este repositorio se concentra en:
 
-```
-/
-├── README.md
-├── general/
-│   ├── overview.md
-│   ├── claves_transversales.md
-│   ├── patrones_detectados.md
-│   ├── riesgos_y_alertas.md
-│   └── roadmap_analisis.md
-├── glosario/
-│   ├── criterios.md
-│   ├── tipos_de_tabla.md
-│   └── claves_y_joins.md
-├── templates/
-│   ├── template_esquema.md
-│   └── template_tabla.md
-├── tools/
-│   └── validador_repo.py
-└── esquemas/
-    ├── ddbb_alimentar/
-    │   ├── ddbb_alimentar.md
-    │   ├── estructura.md
-    │   ├── tablas_clave.md
-    │   ├── relaciones.md
-    │   ├── queries.md
-    │   ├── hallazgos.md
-    │   └── pendientes.md
-    ├── ddbb_anses/
-    ├── ddbb_niñez/
-    ├── ddbb_educacion/
-    └── ddbb_stess/
-```
+- detección de campos geográficos
+- evaluación de granularidad geográfica
+- evaluación de codificación
+- evaluación de trazabilidad domicilio ↔ CUIL/CUIT
+- identificación de tablas con potencial de geocodificación
+- documentación de fuentes oficiales codificadas para normalización y cruce
 
----
+Queda fuera del alcance principal:
 
-## Esquemas analizados
+- análisis funcional completo de programas
+- modelado integral de relaciones familiares
+- análisis de prestaciones no vinculadas a localización
+- calidad general de datos que no impacte en georreferenciación
 
-- esquemas/ddbb_alimentar/ddbb_alimentar.md
-- esquemas/ddbb_anses/ddbb_anses.md
-- esquemas/ddbb_niñez/ddbb_niñez.md
-- esquemas/ddbb_educacion/ddbb_educacion.md
-- esquemas/ddbb_stess/ddbb_stess.md
+## Ejes de análisis obligatorios
 
----
+Cada tabla debe analizarse con estos ejes:
 
-## Criterios clave del proyecto
+### A. Presencia geográfica
 
-### Clave de integración
-- CUIT/CUIL → clave principal (master join)
-- DNI → clave secundaria
-- Nombre/apellido → validación débil
+- tiene o no tiene campos geográficos
+- campos detectados
+- tipo de dato geográfico presente
 
-### Tipos de tablas
-- nominal
-- relación
-- serie
-- staging
-- referencia
+### B. Nivel de granularidad
 
-### Separación obligatoria
-Cada esquema se documenta separando:
-- estructura
-- tablas clave
-- relaciones
-- queries
-- hallazgos
-- pendientes
+- país
+- provincia
+- departamento / partido
+- municipio
+- localidad
+- código postal
+- calle
+- número
+- piso / departamento
+- coordenadas
+- establecimiento o referencia territorial
 
----
+### C. Codificación
 
-## Validación de estructura
+Clasificación esperada:
 
-Ejecutar:
+- codificada
+- parcialmente codificada
+- no codificada
 
-python tools/validador_repo.py .
+Se debe indicar:
 
-Modo estricto:
+- qué campo está codificado
+- contra qué catálogo o capa podría validarse
+- qué campos están en texto libre
 
-python tools/validador_repo.py . --strict
+### D. Vinculación con CUIL/CUIT
 
----
+Determinar si la tabla permite asociar una geografía a:
 
-## Convenciones
+- CUIL/CUIT directo
+- DNI
+- titular / beneficiario / menor / adulto
+- ninguna entidad nominal clara
 
-- Solo existe README.md en la raíz
-- Cada esquema tiene un archivo principal con su nombre:
-  esquemas/<schema>/<schema>.md
-- No usar prefijos numéricos en archivos
-- Un archivo = una función
+También debe indicarse:
 
----
+- una dirección por CUIL/CUIT
+- múltiples direcciones por CUIL/CUIT a lo largo del tiempo
+- una dirección compartida por múltiples personas
+- imposibilidad de resolver domicilio
 
-## Estado del proyecto
+### E. Potencial de georreferenciación
 
-Repositorio en construcción.
+Clasificación:
 
-Prioridades:
-- normalizar análisis por esquema
-- identificar claves confiables
-- evaluar calidad de datos
-- preparar integración hacia padrón único
+- alto: dirección completa o coordenadas
+- medio: localidad / municipio / CP
+- bajo: solo provincia
+- nulo: sin dato geográfico utilizable
 
----
+## Tipología de tablas
 
-## Uso esperado
+Las tablas deben clasificarse en una de estas categorías:
 
-Debe permitir responder rápidamente:
+- nominal con geografía directa
+- nominal sin geografía
+- evento con geografía
+- relación con geografía derivada
+- establecimiento / operativo / sede
+- catálogo geográfico
+- catálogo no geográfico
 
-- qué esquema aporta personas
-- qué tablas son utilizables
-- qué claves permiten cruce
-- qué calidad tiene cada fuente
+## Productos del análisis
 
-Si no responde esas preguntas → la documentación está incompleta.
+Para cada esquema se debe producir:
+
+- inventario de tablas con y sin geografía
+- evaluación de codificación
+- evaluación de posibilidad de obtener domicilio por CUIL/CUIT
+- identificación de tablas prioritarias para geocodificación
+- identificación de tablas que requieren normalización previa
+
+En la raíz del proyecto debe existir:
+
+- un brief operativo
+- una tabla de control de avance
+- un documento de fuentes oficiales
+
+## Regla práctica
+
+Si una tabla no ayuda a localizar personas, hogares, prestaciones territorializadas o establecimientos, su valor para este proyecto es secundario.
