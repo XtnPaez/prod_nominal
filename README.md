@@ -1,4 +1,4 @@
-# PROD_NOMINAL – Análisis de Esquemas y Datos Nominales
+# prod_nominal – Análisis de Esquemas y Datos Nominales
 
 ## Propósito
 
@@ -22,7 +22,6 @@ Orden recomendado:
 
 ## Estructura del repositorio
 
-/
 ├── README.md
 ├── general/
 │   ├── overview.md
