@@ -4,35 +4,46 @@
 
 Evaluar bases de datos exclusivamente desde su capacidad para **geolocalizar personas**.
 
-No se analizan aspectos de negocio.
-Solo interesa si una persona puede ser ubicada en el territorio y con qué precisión.
+El análisis se enfoca únicamente en:
+
+* presencia de datos geográficos
+* vínculo con CUIL/CUIT
+* nivel de precisión alcanzable
+* viabilidad operativa
 
 ---
 
 ## Pregunta central
 
-Para cada tabla:
+Para cada esquema:
 
-* ¿tiene datos geográficos?
-* ¿qué campos?
-* ¿está vinculada a CUIL/CUIT?
-* ¿hasta qué nivel permite ubicar a la persona?
+* ¿existe vínculo CUIL → ubicación?
+* ¿qué nivel geográfico se puede alcanzar?
+* ¿vale la pena trabajar esa base?
 
 ---
 
 ## Metodología
 
-1. Identificar tablas con datos geográficos
-2. Listar campos geo
-3. Verificar vínculo con CUIL/CUIT
-4. Determinar nivel máximo alcanzable:
+1. Identificar la tabla principal con datos geo
+
+   * o construir una vista ad hoc si el geo está fragmentado
+
+2. Detectar:
+
+   * campos geográficos
+   * vínculo con CUIL/CUIT
+
+3. Determinar nivel máximo alcanzable:
 
    * provincia
    * departamento
    * localidad
    * dirección
-5. Evaluar calidad de datos (queries)
-6. Decidir:
+
+4. Evaluar calidad (posterior)
+
+5. Decidir:
 
    * trabajar
    * trabajar con reservas
@@ -40,65 +51,92 @@ Para cada tabla:
 
 ---
 
-## Niveles de geolocalización
+## Regla operativa
 
-* **Provincia** → campo provincia
-* **Departamento** → provincia + departamento/partido o equivalente
-* **Localidad** → provincia + localidad
-* **Dirección** → calle + número (y opcionales)
-
----
-
-## Criterios de descarte (operativos)
-
-* sin campos geo → descartar
-* sin CUIL/CUIT o vínculo indirecto débil → bajo valor
-* baja completitud → no se trabaja ese nivel
+* si no hay CUIL vinculado → no sirve
+* si no hay geo → no sirve
+* si el geo no permite ubicar → no sirve
 
 ---
 
-## Fuentes oficiales
+## Uso de código postal
 
-* provincias (INDEC)
-* departamentos (INDEC)
-* localidades (BAHRA)
+El código postal se considera dato geográfico válido.
 
-Estas son la única referencia válida para normalización.
+Se utiliza como **ancla territorial intermedia** para:
+
+* asignar provincia
+* asignar departamento
+* acotar matching de localidad
 
 ---
 
 ## Esquemas analizados
 
-| esquema   | tablas geo | nivel max | calidad | decisión  |
-| --------- | ---------- | --------- | ------- | --------- |
-| alimentar | 3          | dirección | alta    | trabajar  |
-| anses     | -          | -         | -       | pendiente |
-| stess     | -          | -         | -       | pendiente |
-| educacion | -          | -         | -       | pendiente |
-| niñez     | -          | -         | -       | pendiente |
+| esquema   | tabla principal         | nivel max    | cuil | cp | decisión              |
+| --------- | ----------------------- | ------------ | ---- | -- | --------------------- |
+| alimentar | titulares               | direccion    | sí   | sí | trabajar              |
+| anses     | anses                   | departamento | sí   | sí | trabajar              |
+| educacion | becas_belgrano          | direccion    | sí   | sí | trabajar              |
+| niñez     | nina_nino_adolescente   | departamento | sí   | sí | trabajar              |
+| stess     | vista_ad_hoc_padron_geo | direccion    | sí   | no | trabajar con reservas |
+
+---
+
+## Lectura rápida por esquema
+
+* **Alimentar**
+  mejor caso general: dirección + CP + CUIL
+
+* **ANSES**
+  sin dirección, pero con CP y provincia codificada
+
+* **Educación**
+  completo: dirección + departamento explícito + CP
+
+* **Niñez**
+  similar a ANSES pero con menor calidad estructural
+
+* **STESS**
+  requiere reconstrucción (join), pero potencial alto
 
 ---
 
 ## Estado actual
 
-* alimentar → identificado y validado
-* resto → pendiente de análisis
+* inventario geo completo en todos los esquemas
+* identificación de tablas principales
+* definición de nivel geográfico alcanzable
 
 ---
 
 ## Estructura del repo
 
-* `esquemas/` → análisis por base
+* `esquemas/`
 
-  * `resumen_geo.md` → inventario y potencial geo
-  * `queries_calidad.sql` → evaluación de calidad
+  * `resumen_geo.md` → análisis por esquema
+  * `queries_calidad.sql` → evaluación (siguiente etapa)
 
-* `criterios/` → reglas de análisis
+* `criterios/`
 
-* `fuentes_oficiales/` → capas de referencia
+  * reglas de análisis
+
+* `fuentes_oficiales/`
+
+  * capas de referencia para normalización
 
 ---
 
-## Regla principal
+## Siguiente paso
+
+Evaluación de calidad de datos por esquema:
+
+* completitud
+* consistencia
+* potencial real de uso
+
+---
+
+## Regla final
 
 Si no ayuda a ubicar a una persona en el territorio, no importa.
