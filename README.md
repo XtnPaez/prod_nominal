@@ -6,7 +6,7 @@ Evaluar bases de datos exclusivamente desde su capacidad para **geolocalizar per
 
 El análisis se enfoca únicamente en:
 
-* presencia de datos geográficos
+* existencia de datos geográficos
 * vínculo con CUIL/CUIT
 * nivel de precisión alcanzable
 * viabilidad operativa
@@ -41,7 +41,7 @@ Para cada esquema:
    * localidad
    * dirección
 
-4. Evaluar calidad (posterior)
+4. Evaluar calidad (etapa siguiente)
 
 5. Decidir:
 
@@ -53,9 +53,9 @@ Para cada esquema:
 
 ## Regla operativa
 
-* si no hay CUIL vinculado → no sirve
-* si no hay geo → no sirve
-* si el geo no permite ubicar → no sirve
+* sin CUIL → no sirve
+* sin datos geo → no sirve
+* si no permite ubicar → no sirve
 
 ---
 
@@ -67,7 +67,27 @@ Se utiliza como **ancla territorial intermedia** para:
 
 * asignar provincia
 * asignar departamento
-* acotar matching de localidad
+* reducir ambigüedad en localidad
+
+---
+
+## Infraestructura clave
+
+### Repositorio de códigos postales
+
+https://asimov.cncps.gob.ar/cpaez/cod_pos_AR
+
+Estado:
+
+* codificado contra provincias (INDEC)
+* codificado contra departamentos (INDEC)
+* pendiente codificación a nivel localidad
+
+Rol:
+
+* puente entre bases nominales y capas oficiales
+* permite transformar CP declarativo en referencia territorial codificada
+* pieza central del pipeline geo
 
 ---
 
@@ -81,6 +101,7 @@ Se utiliza como **ancla territorial intermedia** para:
 | niñez     | nina_nino_adolescente   | departamento |
 | stess     | vista_ad_hoc_padron_geo | dirección    |
 
+---
 
 | esquema   | cuil | código postal | decisión              |
 | --------- | ---- | ------------- | --------------------- |
@@ -90,50 +111,33 @@ Se utiliza como **ancla territorial intermedia** para:
 | niñez     | sí   | sí            | trabajar              |
 | stess     | sí   | no            | trabajar con reservas |
 
-
 ---
 
 ## Lectura rápida por esquema
 
 * **Alimentar**
-  mejor caso general: dirección + CP + CUIL
+  dirección + CP + CUIL → máxima precisión
 
 * **ANSES**
   sin dirección, pero con CP y provincia codificada
 
 * **Educación**
-  completo: dirección + departamento explícito + CP
+  estructura completa: dirección + departamento + CP
 
 * **Niñez**
-  similar a ANSES pero con menor calidad estructural
+  similar a ANSES pero sin codificación
 
 * **STESS**
-  requiere reconstrucción (join), pero potencial alto
+  requiere reconstrucción (join), alto potencial
 
 ---
 
 ## Estado actual
 
-* inventario geo completo en todos los esquemas
-* identificación de tablas principales
-* definición de nivel geográfico alcanzable
-
----
-
-## Estructura del repo
-
-* `esquemas/`
-
-  * `resumen_geo.md` → análisis por esquema
-  * `queries_calidad.sql` → evaluación (siguiente etapa)
-
-* `criterios/`
-
-  * reglas de análisis
-
-* `fuentes_oficiales/`
-
-  * capas de referencia para normalización
+* inventario geo completo
+* tablas principales identificadas
+* niveles de geolocalización definidos
+* infraestructura de CP operativa (provincia + departamento)
 
 ---
 
@@ -143,7 +147,7 @@ Evaluación de calidad de datos por esquema:
 
 * completitud
 * consistencia
-* potencial real de uso
+* cobertura real
 
 ---
 
