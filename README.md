@@ -73,13 +73,23 @@ Se utiliza como **ancla territorial intermedia** para:
 
 ## Esquemas analizados
 
-| esquema   | tabla principal         | nivel max    | cuil | cp | decisión              |
-| --------- | ----------------------- | ------------ | ---- | -- | --------------------- |
-| alimentar | titulares               | direccion    | sí   | sí | trabajar              |
-| anses     | anses                   | departamento | sí   | sí | trabajar              |
-| educacion | becas_belgrano          | direccion    | sí   | sí | trabajar              |
-| niñez     | nina_nino_adolescente   | departamento | sí   | sí | trabajar              |
-| stess     | vista_ad_hoc_padron_geo | direccion    | sí   | no | trabajar con reservas |
+| esquema   | tabla principal         | nivel máximo |
+| --------- | ----------------------- | ------------ |
+| alimentar | titulares               | dirección    |
+| anses     | anses                   | departamento |
+| educacion | becas_belgrano          | dirección    |
+| niñez     | nina_nino_adolescente   | departamento |
+| stess     | vista_ad_hoc_padron_geo | dirección    |
+
+
+| esquema   | cuil | código postal | decisión              |
+| --------- | ---- | ------------- | --------------------- |
+| alimentar | sí   | sí            | trabajar              |
+| anses     | sí   | sí            | trabajar              |
+| educacion | sí   | sí            | trabajar              |
+| niñez     | sí   | sí            | trabajar              |
+| stess     | sí   | no            | trabajar con reservas |
+
 
 ---
 
