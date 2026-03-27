@@ -2,13 +2,13 @@
 
 ## Tabla principal con datos geográficos
 
-### Tabla: personas
+### Tabla: anses
 
 * **campos geo:**
 
-  * provincia
-  * localidad
-  * cod_postal
+  * provincia_cd
+  * localidad_tx
+  * codigo_postal_nu
 
 * **tipo de dato geo:**
 
@@ -18,7 +18,7 @@
 
 * **CUIL/CUIT:**
 
-  * campo: cuil
+  * campo: cuil_cuit_nu
   * relación: directa
 
 * **nivel máximo potencial:**
@@ -27,22 +27,23 @@
 
 * **observaciones:**
 
+  * provincia viene codificada (ventaja estructural)
   * no hay dirección (sin calle ni número)
-  * el código postal es el principal ancla geográfica
-  * provincia y localidad en texto libre
-  * la precisión depende casi totalmente de la calidad del CP
+  * código postal es el principal ancla territorial
+  * localidad en texto libre, requiere normalización
+  * posible presencia de múltiples CUIL asociados (estructura familiar)
 
 ---
 
 ## Tablas adicionales con datos geo (solo si aportan campos distintos)
 
-* no se identifican tablas con campos geo adicionales relevantes
+* no se identifican tablas con datos geográficos adicionales relevantes
 
 ---
 
 ## Síntesis del esquema
 
-* **tabla principal:** personas
+* **tabla principal:** anses
 * **nivel máximo alcanzable:** departamento
 * **cuil asociado:** sí
 * **uso de código postal:** sí
@@ -55,8 +56,8 @@
 * **complejidad de normalización:** baja
 * **riesgo principal:**
 
-  * dependencia total del código postal
-  * ausencia de dirección impide geocodificación fina
+  * dependencia del código postal
+  * imposibilidad de geocodificación a nivel dirección
 
 ---
 
@@ -70,4 +71,4 @@
 
 * generar queries de calidad sobre:
 
-  * personas
+  * anses
