@@ -14,204 +14,212 @@ Asignar **departamento** a los CUIL/CUIT de la base ANSES para construir el prim
 
 * `ddbb_anses.anses`
 
-### Campos relevantes
+### Campos utilizados
 
 * `cuil_cuit_nu` → identificador nominal
-* `provincia_cd` → provincia codificada
-* `localidad_tx` → localidad declarada
-* `codigo_postal_nu` → código postal declarado
+* `provincia_cd` → código de provincia (catálogo ANSES)
+* `codigo_postal_nu` → código postal
 
 ### Nivel máximo alcanzable
 
 * **departamento**
 
-Observación:
+---
 
-* la tabla no tiene dirección
-* el cruce territorial dependerá de `provincia_cd` + `codigo_postal_nu`
+## Diagnóstico
+
+Resultados sobre la base ANSES:
+
+* total registros: **11.283.777**
+* candidatos (CP + provincia): **11.227.845**
+* casos con departamento asignado: **8.070.513**
+* cobertura sobre total: **71,52%**
+* cobertura sobre candidatos: **71,88%**
+
+Observaciones:
+
+* el campo `codigo_postal_nu` presenta distribución geográfica consistente
+* el campo `provincia_cd` está completo pero utiliza un catálogo propio de ANSES
+* existe inconsistencia entre provincia y código postal en una proporción significativa de casos
 
 ---
 
-## Diagnóstico preliminar
+## Problema detectado
 
-Resultados observados sobre `ddbb_anses.anses`:
+Los códigos de provincia de ANSES no coinciden con los códigos utilizados en las capas oficiales.
 
-* total de registros: **11.283.777**
-* códigos postales distintos: **1.752**
-* distribución de CP consistente con geografía real
-* ejemplos de CP frecuentes:
+Ejemplo:
 
-  * `2000`
-  * `1900`
-  * `7600`
-  * `8000`
-  * `4400`
+| ANSES | IGN |
+| ----- | --- |
+| 01    | 02  |
+| 02    | 06  |
+| 13    | 82  |
 
-Lectura:
-
-* el campo `codigo_postal_nu` es usable
-* `provincia_cd` ya viene codificada
-* ANSES es una base apta para asignación territorial a nivel departamento
+Esto impide usar directamente la provincia como filtro en el join.
 
 ---
 
-## Tabla territorial de referencia
+## Solución implementada
 
-### Fuente esperada
+### 1. Tabla de equivalencias
+
+Se creó:
+
+* `piloto_nominal.provincia_anses_ign`
+
+Función:
+
+* traducir `provincia_cd` (ANSES) → `codprov_ign`
+
+---
+
+### 2. Normalización de provincia
+
+Se incorpora en la tabla de trabajo:
+
+* `codprov_anses_ign`
+
+---
+
+### 3. Estrategia de cruce
+
+El cruce se realiza con:
+
+* `cp`
+* `codprov_anses_ign`
+
+Contra:
 
 * `unidades_geoestadisticas.codigos_postales_2026_siempro`
 
-### Origen
+Condición:
 
-Repositorio:
+```
+cp = cp
+AND codprov_anses_ign = codprov_ign
+```
 
-* `cod_pos_AR`
+---
 
-### Estado
+### 4. Criterio de asignación
 
-* codificada contra provincias
-* codificada contra departamentos
-* pendiente localidad
+Se asigna departamento cuando:
 
-### Campos relevantes
+* existe correspondencia CP + provincia normalizada
+* el par CP–provincia tiene un único departamento asociado
+
+---
+
+## Tabla territorial
+
+### Fuente
+
+* `unidades_geoestadisticas.codigos_postales_2026_siempro`
+
+Origen:
+
+* repositorio `cod_pos_AR`
+
+Características:
+
+* codificada contra provincias IGN
+* codificada contra departamentos IGN
+* validada
+
+Campos utilizados:
 
 * `cp`
 * `codprov_ign`
-* `provincia_ign`
 * `coddepto_ign`
-* `departamento_ign`
-
-### Rol
-
-* tabla puente para asignar departamento a partir de código postal
-* validación territorial restringida por provincia
 
 ---
 
-## Lógica del cruce
+## Resultado
 
-Condición principal:
+Se generó una tabla enriquecida con:
 
-* `ddbb_anses.anses.codigo_postal_nu = unidades_geoestadisticas.codigos_postales_2026_siempro.cp`
-* `ddbb_anses.anses.provincia_cd = unidades_geoestadisticas.codigos_postales_2026_siempro.codprov_ign`
-
-Secuencia:
-
-1. tomar CUIL/CUIT desde `ddbb_anses.anses`
-2. tomar provincia codificada (`provincia_cd`)
-3. tomar código postal (`codigo_postal_nu`)
-4. cruzar contra `codigos_postales_2026_siempro`
-5. asignar:
-
-   * `coddepto_ign`
-   * `departamento_ign`
-6. construir tabla resultado para agregación final
-
----
-
-## Esquemas involucrados
-
-### Lectura
-
-* `ddbb_anses`
-
-### Escritura requerida
-
-* `prod_nominal`
-* `unidades_geoestadisticas`
-
----
-
-## Dependencias operativas
-
-### 1. Permisos de escritura
-
-El pipeline **no puede ejecutarse todavía en el servidor** porque aún no están disponibles los permisos de escritura necesarios.
-
-### 2. Tabla territorial faltante
-
-Antes de correr el cruce, hay que subir a `prod_nominal` la tabla:
-
-* `cod_pos_AR` ya trabajada y normalizada
-* nombre esperado en servidor:
-
-  * `unidades_geoestadisticas.codigos_postales_2026_siempro`
-
----
-
-## Alerta
-
-> **Estado actual: bloqueado por permisos de escritura y carga de tabla territorial**
->
-> El diseño del pipeline está definido y ANSES ya fue diagnosticada como base apta para el cruce.
-> La ejecución queda pendiente hasta:
->
-> 1. obtener permisos de escritura en el servidor
-> 2. cargar `codigos_postales_2026_siempro` en `unidades_geoestadisticas`
-
----
-
-## Tabla resultado esperada
-
-Nombre sugerido:
-
-* `ddbb_anses.anses_departamentos`
-* o equivalente dentro de esquema de trabajo en `prod_nominal`
-
-Campos mínimos:
-
-* `cuil_cuit_nu`
-* `provincia_cd`
-* `codigo_postal_nu`
+* `cuil`
+* `codprov`
+* `cp`
+* `codprov_anses_ign`
 * `coddepto_ign`
-* `departamento_ign`
 
-Campos recomendados:
+Y posteriormente:
 
-* `fl_match_cp`
-* `fl_match_validado`
-* `created_at`
+* vista agregada por departamento con geometría:
 
----
-
-## Criterio de validación
-
-Un caso se considerará válido cuando:
-
-* exista match por código postal
-* la provincia de ANSES coincida con la provincia de la tabla territorial
-
-Condición lógica:
-
-* `codigo_postal_nu = cp`
-* `provincia_cd = codprov_ign`
+`piloto_nominal.v_total_x_depto_anses`
 
 ---
 
 ## Producto final
 
-Con la tabla ya enriquecida se generará:
+Tabla espacial:
 
-* cantidad de CUIL/CUIT por departamento
-
-Agregación esperada:
-
-* `GROUP BY coddepto_ign, departamento_ign`
+* cantidad de CUIL por departamento
+* lista para visualización en QGIS
 
 ---
 
-## Resultado esperado del pipeline
+## Lectura del resultado
 
-* tabla nominal enriquecida con departamento
-* cobertura medible del cruce
-* primer indicador territorial operativo para ANSES
+* el método permite asignar territorio a más de **8 millones de registros**
+* la cobertura es alta para una base sin dirección
+* el uso de CP como clave es válido
+* la calidad del dato de provincia en ANSES requiere normalización previa
+
+---
+
+## Limitaciones
+
+* CP no identifica unívocamente localidad
+* existen CP asociados a múltiples departamentos
+* parte del universo queda sin asignación (~28%)
+* depende de la calidad del CP declarado
+
+---
+
+## Dependencias operativas
+
+### Permisos
+
+* actualmente el trabajo se ejecuta en entorno auxiliar (`piloto_nominal`)
+* pendiente ejecución directa en `prod_nominal` por falta de permisos de escritura
+
+### Datos
+
+* es necesario cargar en `prod_nominal` la tabla:
+
+  * `codigos_postales_2026_siempro`
+
+---
+
+## Estado
+
+> **Pipeline validado**
+>
+> Resultado consistente y utilizable
+> Listo para escalado al resto de los esquemas
 
 ---
 
 ## Próximo paso
 
-1. obtener permisos de escritura
-2. cargar `codigos_postales_2026_siempro`
-3. ejecutar cruce territorial
-4. medir cobertura efectiva
-5. generar agregado final por departamento
+1. replicar proceso en:
+
+   * Alimentar
+   * Educación
+   * Niñez
+   * STESS
+
+2. consolidar indicador:
+
+   * CUIL por departamento a nivel sistema
+
+3. evaluar mejora futura:
+
+   * incorporación de localidad
+   * refinamiento de CP ambiguos
+
+---
