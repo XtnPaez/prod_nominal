@@ -27,16 +27,51 @@ Asignar **departamento** a los CUIL/CUIT de la base ANSES para construir el prim
 
 Observación:
 
-* la tabla no tiene dirección (sin calle ni número)
+* la tabla no tiene dirección
 * el cruce territorial dependerá de `provincia_cd` + `codigo_postal_nu`
+
+---
+
+## Diagnóstico preliminar
+
+Resultados observados sobre `ddbb_anses.anses`:
+
+* total de registros: **11.283.777**
+* códigos postales distintos: **1.752**
+* distribución de CP consistente con geografía real
+* ejemplos de CP frecuentes:
+
+  * `2000`
+  * `1900`
+  * `7600`
+  * `8000`
+  * `4400`
+
+Lectura:
+
+* el campo `codigo_postal_nu` es usable
+* `provincia_cd` ya viene codificada
+* ANSES es una base apta para asignación territorial a nivel departamento
 
 ---
 
 ## Tabla territorial de referencia
 
-### Fuente
+### Fuente esperada
 
 * `unidades_geoestadisticas.codigos_postales_2026_siempro`
+
+### Origen
+
+Repositorio:
+
+* `cod_pos_AR`
+
+### Estado
+
+* codificada contra provincias
+* codificada contra departamentos
+* pendiente localidad
 
 ### Campos relevantes
 
@@ -55,7 +90,7 @@ Observación:
 
 ## Lógica del cruce
 
-El cruce se hará usando:
+Condición principal:
 
 * `ddbb_anses.anses.codigo_postal_nu = unidades_geoestadisticas.codigos_postales_2026_siempro.cp`
 * `ddbb_anses.anses.provincia_cd = unidades_geoestadisticas.codigos_postales_2026_siempro.codprov_ign`
@@ -76,42 +111,43 @@ Secuencia:
 
 ## Esquemas involucrados
 
-### Solo lectura
+### Lectura
 
 * `ddbb_anses`
-* `unidades_geoestadisticas`
 
 ### Escritura requerida
 
-* esquema de trabajo auxiliar fuera de `prod_nominal`
+* `prod_nominal`
+* `unidades_geoestadisticas`
 
 ---
 
-## Restricción operativa
+## Dependencias operativas
 
-En `prod_nominal` solo hay permisos de **SELECT**.
+### 1. Permisos de escritura
 
-Por lo tanto, el pipeline requiere una etapa manual/intermedia:
+El pipeline **no puede ejecutarse todavía en el servidor** porque aún no están disponibles los permisos de escritura necesarios.
 
-1. extraer desde `prod_nominal`:
+### 2. Tabla territorial faltante
 
-   * subconjunto de ANSES con:
+Antes de correr el cruce, hay que subir a `prod_nominal` la tabla:
 
-     * `cuil_cuit_nu`
-     * `provincia_cd`
-     * `localidad_tx`
-     * `codigo_postal_nu`
+* `cod_pos_AR` ya trabajada y normalizada
+* nombre esperado en servidor:
 
-2. llevar esos datos a un esquema/entorno con permisos de escritura
+  * `unidades_geoestadisticas.codigos_postales_2026_siempro`
 
-3. ejecutar allí el cruce territorial
+---
 
-4. obtener tabla resultado con:
+## Alerta
 
-   * `cuil_cuit_nu`
-   * `codprov`
-   * `coddepto`
-   * `departamento`
+> **Estado actual: bloqueado por permisos de escritura y carga de tabla territorial**
+>
+> El diseño del pipeline está definido y ANSES ya fue diagnosticada como base apta para el cruce.
+> La ejecución queda pendiente hasta:
+>
+> 1. obtener permisos de escritura en el servidor
+> 2. cargar `codigos_postales_2026_siempro` en `unidades_geoestadisticas`
 
 ---
 
@@ -119,8 +155,8 @@ Por lo tanto, el pipeline requiere una etapa manual/intermedia:
 
 Nombre sugerido:
 
-* `piloto_nominal.anses_departamentos`
-* o equivalente en esquema de trabajo
+* `ddbb_anses.anses_departamentos`
+* o equivalente dentro de esquema de trabajo en `prod_nominal`
 
 Campos mínimos:
 
@@ -168,17 +204,14 @@ Agregación esperada:
 
 * tabla nominal enriquecida con departamento
 * cobertura medible del cruce
-* base lista para producir el primer indicador territorial de ANSES
+* primer indicador territorial operativo para ANSES
 
 ---
 
 ## Próximo paso
 
-1. extraer universo base ANSES
-2. medir completitud de:
-
-   * `provincia_cd`
-   * `codigo_postal_nu`
-3. correr cruce territorial
+1. obtener permisos de escritura
+2. cargar `codigos_postales_2026_siempro`
+3. ejecutar cruce territorial
 4. medir cobertura efectiva
 5. generar agregado final por departamento
