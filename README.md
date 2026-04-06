@@ -1,104 +1,147 @@
-# GEO — Evaluación de geolocalización de bases nominales
+# GEO — Asignación territorial de bases nominales
+
+![Estado](https://img.shields.io/badge/estado-activo-brightgreen)
+![Enfoque](https://img.shields.io/badge/enfoque-geolocalización-blue)
+![Nivel actual](https://img.shields.io/badge/nivel-departamento-orange)
+![Cobertura ANSES](https://img.shields.io/badge/ANSES-83.24%25-success)
+
+---
 
 ## Propósito
 
-Evaluar bases de datos exclusivamente desde su capacidad para **geolocalizar personas**.
+Construir una infraestructura simple y robusta para asignar ubicación territorial a personas a partir de bases nominales.
 
-El análisis se enfoca en:
+El objetivo operativo es:
 
-* existencia de datos geográficos
-* vínculo con CUIL/CUIT
-* nivel de precisión alcanzable
-* viabilidad operativa
+> **obtener la cantidad de CUIL por departamento**
+
+---
+
+## Alcance
+
+El proyecto se enfoca exclusivamente en geolocalización:
+
+* normalización de provincia
+* uso de código postal como ancla territorial
+* asignación de departamento
+* generación de indicadores territoriales
+
+No se evalúan aspectos de negocio ni consistencia general de datos.
+
+---
+
+## Arquitectura
+
+### `geo_ref`
+
+Tablas de referencia geográfica:
+
+* provincias
+* departamentos
+* localidades
+* códigos postales
+* alias
+
+---
+
+### `geo_work`
+
+Tablas de trabajo:
+
+* staging de bases nominales
+* joins territoriales
+* agregados por departamento
+
+---
+
+### `ddbb_analisis`
+
+Espacio reservado para análisis de consistencia por otros equipos.
 
 ---
 
 ## Metodología
 
-1. identificar tabla principal con geo
-2. detectar vínculo con CUIL/CUIT
-3. definir nivel máximo alcanzable
-4. usar código postal como ancla territorial cuando corresponda
+1. extraer datos mínimos (CUIL, provincia, CP)
+2. normalizar provincia
+3. normalizar código postal
+4. cruzar con tabla de códigos postales
 5. asignar departamento
-6. medir cobertura real
+6. medir cobertura
 
 ---
 
-## Infraestructura clave
+## Estrategia
 
-### Repositorio de códigos postales
+### Etapa 1 — Departamento
 
-`cod_pos_AR`
-
-Rol:
-
-* fuente operativa para asignación territorial por código postal
-* codificada contra provincias y departamentos IGN
-* complementada con CABA para mejorar cobertura
+Asignación territorial por código postal.
+Nivel objetivo: **departamento**
 
 ---
 
-## Esquemas analizados
+### Etapa 2 — Localidad
 
-| esquema   | tabla principal         | nivel máximo |
-| --------- | ----------------------- | ------------ |
-| alimentar | titulares               | dirección    |
-| anses     | anses                   | departamento |
-| educacion | becas_belgrano          | dirección    |
-| niñez     | nina_nino_adolescente   | departamento |
-| stess     | vista_ad_hoc_padron_geo | dirección    |
+Descenso a localidad en las bases que lo permitan.
 
 ---
 
-| esquema   | cuil | código postal | decisión              |
-| --------- | ---- | ------------- | --------------------- |
-| alimentar | sí   | sí            | trabajar              |
-| anses     | sí   | sí            | trabajar              |
-| educacion | sí   | sí            | trabajar              |
-| niñez     | sí   | sí            | trabajar              |
-| stess     | sí   | no            | trabajar con reservas |
+### Etapa 3 — Dirección
+
+Descenso a dirección en las bases que lo permitan.
 
 ---
 
-## Estado actual
+## Proceso transversal
 
-### Alimentar
+Construcción continua de tablas de alias:
 
-* piloto validado
-* cobertura con fuente SIEMPRO: **97,17%**
+* provincias
+* departamentos
+* localidades
+
+Permiten acelerar la incorporación de nuevas bases y mejorar calidad progresivamente.
+
+---
+
+## Esquemas trabajados
+
+| esquema   | nivel actual | estado    |
+| --------- | ------------ | --------- |
+| ANSES     | departamento | validado  |
+| Alimentar | departamento | en curso  |
+| Educación | dirección    | pendiente |
+| Niñez     | departamento | pendiente |
+| STESS     | dirección    | pendiente |
+
+---
+
+## Resultado actual
 
 ### ANSES
 
-* pipeline validado
-* **11.283.777** registros
-* **9.392.161** con departamento asignado
+* registros: **11.283.777**
+* con departamento: **9.392.161**
 * cobertura: **83,24%**
 
----
-
-## Resultado principal hasta ahora
-
-Ya se validó el indicador:
-
-> **cantidad de CUIL por departamento**
-
-sobre ANSES, con salida espacial para QGIS.
+Pipeline validado y replicable.
 
 ---
 
-## Próximo paso
+## Principio rector
 
-* replicar el mismo proceso en:
-
-  * Educación
-  * Niñez
-  * STESS
-  * Alimentar como corrida completa
-
-* consolidar un indicador territorial unificado para todo el sistema
+> Si no ayuda a ubicar a una persona en el territorio, no importa.
 
 ---
 
-## Regla final
+## Estado del proyecto
 
-Si no ayuda a ubicar a una persona en el territorio, no importa.
+* arquitectura definida
+* pipeline validado
+* escalado en curso
+
+---
+
+## Autoría
+
+Proyecto desarrollado para normalización y explotación territorial de bases nominales.
