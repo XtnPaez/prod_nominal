@@ -3,17 +3,13 @@
 ![Estado](https://img.shields.io/badge/estado-activo-brightgreen)
 ![Enfoque](https://img.shields.io/badge/enfoque-geolocalización-blue)
 
----
-
 ## Propósito
 
 Construir una infraestructura simple y robusta para asignar ubicación territorial a personas a partir de bases nominales.
 
-El objetivo operativo es:
+Objetivo operativo actual:
 
 > **obtener la cantidad de CUIL por departamento**
-
----
 
 ## Alcance
 
@@ -26,23 +22,17 @@ El proyecto se enfoca exclusivamente en geolocalización:
 
 No se evalúan aspectos de negocio ni consistencia general de datos.
 
----
-
 ## Arquitectura
 
 ### `geo_ref`
 
-Tablas de referencia geográfica:
+Tablas de referencia geográfica sin geometrías:
 
 * provincias
 * departamentos
 * localidades
 * códigos postales
 * alias
-
-geo_ref cargado y validado para uso operativo
-
----
 
 ### `geo_work`
 
@@ -52,13 +42,9 @@ Tablas de trabajo:
 * joins territoriales
 * agregados por departamento
 
----
-
 ### `ddbb_analisis`
 
-Espacio reservado para análisis de consistencia por otros equipos.
-
----
+Esquema reservado para análisis de consistencia por otros equipos.
 
 ## Metodología
 
@@ -69,28 +55,20 @@ Espacio reservado para análisis de consistencia por otros equipos.
 5. asignar departamento
 6. medir cobertura
 
----
-
 ## Estrategia
 
-### Etapa 1 — Departamento
+### Etapa 1
 
 Asignación territorial por código postal.
 Nivel objetivo: **departamento**
 
----
-
-### Etapa 2 — Localidad
+### Etapa 2
 
 Descenso a localidad en las bases que lo permitan.
 
----
-
-### Etapa 3 — Dirección
+### Etapa 3
 
 Descenso a dirección en las bases que lo permitan.
-
----
 
 ## Proceso transversal
 
@@ -102,34 +80,23 @@ Construcción continua de tablas de alias:
 
 Permiten acelerar la incorporación de nuevas bases y mejorar calidad progresivamente.
 
----
-
 ## Esquemas trabajados
 
 | esquema   | nivel actual | estado    |
 | --------- | ------------ | --------- |
-| ANSES     | departamento | pendiente |
+| ANSES     | departamento | resuelto  |
 | Alimentar | departamento | pendiente |
 | Educación | dirección    | pendiente |
 | Niñez     | departamento | pendiente |
 | STESS     | dirección    | pendiente |
 
----
+## Estado actual
 
-## Principio rector
+* `geo_ref` cargado y operativo
+* `geo_work` definido
+* pipeline de ANSES resuelto en el nuevo modelo
+* resto de los esquemas pendientes de implementación
 
-> Si no ayuda a ubicar a una persona en el territorio, no importa.
+## Regla del proyecto
 
----
-
-## Estado del proyecto
-
-* arquitectura definida
-* pipeline validado
-* escalado en curso
-
----
-
-## Autoría
-
-Proyecto desarrollado para normalización y explotación territorial de bases nominales.
+Si no ayuda a ubicar a una persona en el territorio, no importa.

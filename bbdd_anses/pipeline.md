@@ -10,9 +10,7 @@ Asignar **departamento** a los CUIL de ANSES usando:
 
 Resultado final:
 
-* **cantidad de CUIL por departamento**
-
----
+> **cantidad de CUIL por departamento**
 
 ## Fuente nominal
 
@@ -20,50 +18,37 @@ Tabla origen:
 
 * `ddbb_anses.anses`
 
-Campos mínimos a extraer:
+Campos mínimos usados:
 
 * `cuil_cuit_nu` → `cuil`
 * `provincia_cd` → `codprov_fuente`
 * `codigo_postal_nu` → `cp_fuente`
 
----
-
 ## Referencia geo
 
-Tablas de referencia:
+Tablas usadas:
 
 * `geo_ref.codigos_postales`
 * `geo_ref.alias_provincias_anses`
 
-Uso:
-
-* traducir provincia ANSES a provincia de referencia
-* asignar departamento por `cp + codprov_ref`
-
----
-
 ## Tablas de trabajo
 
-### 1. `geo_work.anses_base`
+### `geo_work.anses_base`
 
 Extracto mínimo desde ANSES.
 
-Campos esperados:
+Campos:
 
 * `cuil`
 * `codprov_fuente`
 * `cp_fuente`
 * `codprov_ref`
-* `created_at`
-* `updated_at`
 
----
-
-### 2. `geo_work.anses_join`
+### `geo_work.anses_join`
 
 Resultado del cruce territorial.
 
-Campos esperados:
+Campos:
 
 * `cuil`
 * `codprov_fuente`
@@ -73,89 +58,57 @@ Campos esperados:
 * `cp_match`
 * `fl_match_cp`
 * `fl_match_validado`
-* `created_at`
-* `updated_at`
 
----
-
-### 3. `geo_work.anses_agg_depto`
+### `geo_work.anses_agg_depto`
 
 Agregado final por departamento.
 
-Campos esperados:
+Campos:
 
 * `coddepto_ref`
 * `total_cuiles`
 
----
+## Secuencia aplicada
 
-## Secuencia
+1. creación de `geo_work.anses_base`
+2. carga de extracto mínimo desde `ddbb_anses.anses`
+3. asignación de `codprov_ref` usando `geo_ref.alias_provincias_anses`
+4. creación de `geo_work.anses_join`
+5. cruce territorial por:
 
-### Paso 1
+   * `cp_fuente = cp`
+   * `codprov_ref = codprov_ref`
+6. creación de `geo_work.anses_agg_depto`
+7. agregado:
 
-Crear `geo_work.anses_base`
+   * `COUNT(DISTINCT cuil)` por `coddepto_ref`
 
-### Paso 2
+## Resultado
 
-Cargar extracto mínimo desde `ddbb_anses.anses`
+* total base: **11.283.777**
+* con departamento asignado: **9.392.161**
+* cobertura sobre total: **83,24%**
 
-### Paso 3
+## Lectura
 
-Asignar `codprov_ref` usando `geo_ref.alias_provincias_anses`
-
-### Paso 4
-
-Crear `geo_work.anses_join`
-
-### Paso 5
-
-Cruzar contra `geo_ref.codigos_postales` por:
-
-* `cp_fuente = cp`
-* `codprov_ref = codprov_ref`
-
-### Paso 6
-
-Medir cobertura del join
-
-### Paso 7
-
-Crear `geo_work.anses_agg_depto`
-
-### Paso 8
-
-Agregar:
-
-* `COUNT(DISTINCT cuil)` por `coddepto_ref`
-
----
-
-## Regla de validación
-
-Se considera válido un caso cuando:
-
-* existe match por CP
-* existe correspondencia entre provincia fuente normalizada y provincia de referencia
-
----
+* el pipeline quedó validado
+* el uso de CP como ancla territorial es operativo
+* ANSES queda resuelta a nivel departamento en el nuevo modelo
 
 ## Producto final
 
 Tabla agregada:
 
-* cantidad de CUIL por departamento
+* `geo_work.anses_agg_depto`
 
-Lista para:
+Uso:
 
-* exportación
 * análisis territorial
+* exportación
 * unión posterior con geometrías fuera del servicio si hiciera falta
 
----
+## Estado
 
-## Estado esperado
-
-Pipeline repetible, sin tocar esquemas fuente, usando:
-
-* `geo_ref` como referencia
-* `geo_work` como staging y salida
+> **Resuelto**
+>
+> Pipeline implementado y replicable.
