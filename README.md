@@ -108,23 +108,11 @@ Permiten acelerar la incorporación de nuevas bases y mejorar calidad progresiva
 
 | esquema   | nivel actual | estado    |
 | --------- | ------------ | --------- |
-| ANSES     | departamento | validado  |
-| Alimentar | departamento | en curso  |
+| ANSES     | departamento | pendiente |
+| Alimentar | departamento | pendiente |
 | Educación | dirección    | pendiente |
 | Niñez     | departamento | pendiente |
 | STESS     | dirección    | pendiente |
-
----
-
-## Resultado actual
-
-### ANSES
-
-* registros: **11.283.777**
-* con departamento: **9.392.161**
-* cobertura: **83,24%**
-
-Pipeline validado y replicable.
 
 ---
 
