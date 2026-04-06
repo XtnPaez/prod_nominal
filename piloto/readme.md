@@ -2,111 +2,76 @@
 
 ## Objetivo
 
-Evaluar la viabilidad de asignar **departamento a CUIL** utilizando código postal como clave de cruce, comparando:
-
-* una fuente **apócrifa**
-* una fuente **normalizada y validada** (`cod_pos_AR`)
+Evaluar la viabilidad de asignar **departamento a CUIL** utilizando código postal como clave de cruce, comparando una fuente apócrifa con una fuente normalizada y validada.
 
 ---
 
 ## Universo de análisis
 
-* Base: titulares (Alimentar)
-* Tamaño: ~50.000 registros
-* Unidad: CUIL
+### Piloto Alimentar
+
+* base: titulares
+* tamaño: ~50.000 registros
+
+### ANSES
+
+* base: `ddbb_anses.anses`
+* tamaño: **11.283.777 registros**
 
 ---
 
 ## Estrategia
 
-Para cada registro:
-
 1. tomar código postal declarado
-2. cruzar contra tabla de códigos postales
-3. asignar departamento
-4. validar contra provincia declarada
+2. normalizar provincia si hace falta
+3. cruzar contra tabla de códigos postales
+4. asignar departamento
+5. medir cobertura
 
 ---
 
 ## Fuentes utilizadas
 
-### 1. Fuente apócrifa
+### Fuente apócrifa
 
-Tabla: `piloto_codpos_apocrifos`
+* tabla: `piloto_codpos_apocrifos`
 
-* origen no controlado
-* incluye:
+### Fuente normalizada SIEMPRO
 
-  * cp
-  * departamento
-  * coordenadas
-
----
-
-### 2. Fuente normalizada (SIEMPRO)
-
-Tabla: `codigos_postales_2026_siempro`
-
-Repositorio:
-https://asimov.cncps.gob.ar/cpaez/cod_pos_AR
-
-Características:
-
-* codificada contra IGN
-* incluye:
-
-  * cp
-  * codprov_ign
-  * coddepto_ign
-* validada
+* tabla: `unidades_geoestadisticas.codigos_postales_2026_siempro`
+* origen: repositorio `cod_pos_AR`
+* codificada contra provincias y departamentos IGN
 
 ---
 
-## Criterio de validación
-
-Un caso se considera **válido** cuando:
-
-* se asigna departamento
-* la provincia inferida coincide con la provincia declarada
-
-```text
-coddepto IS NOT NULL
-AND codprov_declarado = codprov_fuente
-```
-
----
-
-## Resultados
+## Resultado del piloto Alimentar
 
 ### Fuente apócrifa
 
-* casos validados: 26.495
+* casos validados: **26.495**
 * cobertura: ~53%
-
----
 
 ### Fuente SIEMPRO
 
-* casos validados: 48.584
-* cobertura: 97,17%
+* casos validados: **48.584**
+* cobertura: **97,17%**
+
+Lectura:
+
+* la fuente SIEMPRO mejora fuertemente la cobertura
+* el pipeline quedó validado
 
 ---
 
-## Comparación
+## Resultado sobre ANSES
 
-| fuente   | casos válidos | cobertura |
-| -------- | ------------- | --------- |
-| apócrifa | 26.495        | ~53%      |
-| siempro  | 48.584        | 97,17%    |
+* total registros: **11.283.777**
+* candidatos: **11.227.845**
+* casos con departamento asignado: **9.392.161**
+* cobertura sobre total: **83,24%**
+* cobertura sobre candidatos: **83,65%**
 
----
-
-## Lectura
-
-* el uso de código postal como clave de asignación territorial es **válido**
-* la calidad de la fuente impacta directamente en la cobertura
-* la tabla normalizada mejora significativamente los resultados
-* la validación por provincia elimina asignaciones inconsistentes
+Se recuperaron **1.321.648 casos de CABA** luego de completar la tabla de códigos postales con esa jurisdicción.
 
 ---
 
@@ -114,22 +79,14 @@ AND codprov_declarado = codprov_fuente
 
 El pipeline:
 
-```
-CUIL → CP → provincia → departamento
-```
+`CUIL → CP → provincia normalizada → departamento`
 
-es **operativamente viable** para escalar al total de bases nominales.
+es **operativamente viable** y puede ser escalado al resto de los esquemas.
 
 ---
 
-## Siguiente paso
+## Producto
 
-* aplicar el proceso a todos los esquemas
-* generar indicador: cantidad de CUIL por departamento
-* evaluar cobertura real sobre universo completo
-
----
-
-## Nota
-
-La tabla `codigos_postales_2026_siempro` es una derivación validada de datos de Correo Argentino cruzados con capas oficiales IGN.
+* asignación territorial por departamento
+* base para mapificación en QGIS
+* indicador: cantidad de CUIL por departamento

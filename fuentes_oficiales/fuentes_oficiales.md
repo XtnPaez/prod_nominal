@@ -3,167 +3,106 @@
 ## 1. Provincias
 
 Fuente:
-unidades_geoestadisticas.provincias_2022_indec
+`unidades_geoestadisticas.provincias_2022_indec`
 
 Campos clave:
 
-* cpr → código provincia
-* nam → nombre
-
-Tipo:
-codificado
+* `cpr`
+* `nam`
 
 Uso:
 
 * normalización de provincia
-* clave primaria geográfica
-
-Estado en proyecto:
-
-* usada para codificar provincia en tabla CP
-* resultado operativo: resuelto
+* referencia oficial IGN
 
 ---
 
 ## 2. Departamentos
 
 Fuente:
-unidades_geoestadisticas.departamentos_2022_indec
+`unidades_geoestadisticas.departamentos_2022_indec`
 
 Campos clave:
 
-* cpr → código provincia
-* cde → código departamento
-* nam → nombre
-
-Tipo:
-codificado
+* `cpr`
+* `cde`
+* `nam`
 
 Uso:
 
-* segundo nivel administrativo
-* desambiguación territorial
-
-Clave:
-cpr + cde
-
-Estado en proyecto:
-
-* usada para codificar partido/departamento en tabla CP
-* matching realizado dentro del subconjunto provincial ya codificado
-
-Observación:
-
-* parte de los scores bajos responde a diferencias nominales y no a errores territoriales
-* ejemplos típicos:
-
-  * nombres oficiales extendidos
-  * títulos como General o Coronel
-  * apóstrofes
-  * abreviaturas
+* codificación de departamento
+* referencia oficial IGN
 
 ---
 
 ## 3. Localidades
 
 Fuente:
-public.localidadBahra
+`public.localidadBahra`
 
 Campos clave:
 
-* codigo_ase → código localidad
-* nombre_geo → nombre
-* nombre_dep → departamento
-* nombre_pro → provincia
-* latitud / longitud
-
-Tipo:
-codificado
+* `codigo_ase`
+* `nombre_geo`
+* `nombre_dep`
+* `nombre_pro`
 
 Uso:
 
-* desambiguación de localidades
-* geocodificación sin API
-* resolución final de localidad oficial
-
-Estado en proyecto:
-
-* pendiente de uso en el cruce final con tablas nominales
+* resolución posterior de localidad oficial
+* no utilizada aún como eje principal de los cruces
 
 ---
 
-## 4. Códigos postales (fuente puente)
+## 4. Códigos postales
 
-Fuente:
-public.cod_pos_ar
+Fuente operativa:
+`unidades_geoestadisticas.codigos_postales_2026_siempro`
 
-Repositorio:
-https://asimov.cncps.gob.ar/cpaez/cod_pos_AR
-
-Tipo:
-semi estructurado (origen) → codificado (proceso propio)
+Origen:
+repositorio `cod_pos_AR`
 
 Estado:
 
-* codificado contra provincias (INDEC)
-* codificado contra departamentos (INDEC)
-* pendiente de codificación a nivel localidad
+* codificada contra provincias IGN
+* codificada contra departamentos IGN
+* complementada con CABA
+* pendiente resolución fina a nivel localidad
+
+Campos clave:
+
+* `cp`
+* `codprov_ign`
+* `coddepto_ign`
 
 Uso:
 
-* tabla puente para bajar bases nominales a departamento
-* ancla territorial intermedia usando código postal
-* reducción de ambigüedad en localidad
+* ancla territorial intermedia
+* asignación de departamento a partir de código postal
+
+---
+
+## 5. Equivalencias de provincia ANSES → IGN
+
+Tabla auxiliar:
+`piloto_nominal.provincia_anses_ign`
+
+Uso:
+
+* traducción de los códigos provinciales propios de ANSES
+* validación territorial previa al cruce por CP
 
 Observación:
 
-* no es fuente oficial
-* sí es pieza central del pipeline geo
-* permite transformar texto libre en referencia territorial codificada
+* necesaria porque el catálogo ANSES no coincide con IGN
 
 ---
 
-## 5. Tabla de trabajo derivada
-
-Tabla:
-public.codpos_normalizada
-
-Rol:
-
-* staging principal del ETL geo por código postal
-
-Contiene:
-
-* campos originales de cod_pos_ar
-* codprov normalizado
-* coddepto normalizado
-* score y confianza de provincia
-* score y confianza de departamento
-
-Uso:
-
-* cruce con bases nominales por codprov + codpos
-* asignación de coddepto
-* preparación para resolución de localidad oficial
-
----
-
-## 6. Modelo jerárquico
-
-Provincia → Departamento → Localidad
-
-* provincia: cpr
-* departamento: cde
-* localidad: codigo_ase
-
----
-
-## 7. Regla operativa
-
-Toda tabla no codificada debe contrastarse contra estas capas antes de cualquier geocodificación.
+## 6. Regla operativa
 
 Cuando exista código postal:
 
-* primero se codifica provincia
-* luego se asigna departamento usando codprov + codpos
-* recién después se intenta resolver localidad oficial
+1. normalizar provincia al catálogo oficial
+2. cruzar por `cp + codprov_ign`
+3. asignar `coddepto_ign`
+4. usar localidad solo como etapa posterior, no como clave principal

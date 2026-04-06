@@ -4,7 +4,7 @@
 
 Evaluar bases de datos exclusivamente desde su capacidad para **geolocalizar personas**.
 
-El análisis se enfoca únicamente en:
+El análisis se enfoca en:
 
 * existencia de datos geográficos
 * vínculo con CUIL/CUIT
@@ -13,61 +13,14 @@ El análisis se enfoca únicamente en:
 
 ---
 
-## Pregunta central
-
-Para cada esquema:
-
-* ¿existe vínculo CUIL → ubicación?
-* ¿qué nivel geográfico se puede alcanzar?
-* ¿vale la pena trabajar esa base?
-
----
-
 ## Metodología
 
-1. Identificar la tabla principal con datos geo
-
-   * o construir una vista ad hoc si el geo está fragmentado
-
-2. Detectar:
-
-   * campos geográficos
-   * vínculo con CUIL/CUIT
-
-3. Determinar nivel máximo alcanzable:
-
-   * provincia
-   * departamento
-   * localidad
-   * dirección
-
-4. Evaluar calidad (etapa siguiente)
-
-5. Decidir:
-
-   * trabajar
-   * trabajar con reservas
-   * descartar
-
----
-
-## Regla operativa
-
-* sin CUIL → no sirve
-* sin datos geo → no sirve
-* si no permite ubicar → no sirve
-
----
-
-## Uso de código postal
-
-El código postal se considera dato geográfico válido.
-
-Se utiliza como **ancla territorial intermedia** para:
-
-* asignar provincia
-* asignar departamento
-* reducir ambigüedad en localidad
+1. identificar tabla principal con geo
+2. detectar vínculo con CUIL/CUIT
+3. definir nivel máximo alcanzable
+4. usar código postal como ancla territorial cuando corresponda
+5. asignar departamento
+6. medir cobertura real
 
 ---
 
@@ -75,19 +28,13 @@ Se utiliza como **ancla territorial intermedia** para:
 
 ### Repositorio de códigos postales
 
-https://asimov.cncps.gob.ar/cpaez/cod_pos_AR
-
-Estado:
-
-* codificado contra provincias (INDEC)
-* codificado contra departamentos (INDEC)
-* pendiente codificación a nivel localidad
+`cod_pos_AR`
 
 Rol:
 
-* puente entre bases nominales y capas oficiales
-* permite transformar CP declarativo en referencia territorial codificada
-* pieza central del pipeline geo
+* fuente operativa para asignación territorial por código postal
+* codificada contra provincias y departamentos IGN
+* complementada con CABA para mejorar cobertura
 
 ---
 
@@ -113,41 +60,42 @@ Rol:
 
 ---
 
-## Lectura rápida por esquema
-
-* **Alimentar**
-  dirección + CP + CUIL → máxima precisión
-
-* **ANSES**
-  sin dirección, pero con CP y provincia codificada
-
-* **Educación**
-  estructura completa: dirección + departamento + CP
-
-* **Niñez**
-  similar a ANSES pero sin codificación
-
-* **STESS**
-  requiere reconstrucción (join), alto potencial
-
----
-
 ## Estado actual
 
-* inventario geo completo
-* tablas principales identificadas
-* niveles de geolocalización definidos
-* infraestructura de CP operativa (provincia + departamento)
+### Alimentar
+
+* piloto validado
+* cobertura con fuente SIEMPRO: **97,17%**
+
+### ANSES
+
+* pipeline validado
+* **11.283.777** registros
+* **9.392.161** con departamento asignado
+* cobertura: **83,24%**
 
 ---
 
-## Siguiente paso
+## Resultado principal hasta ahora
 
-Evaluación de calidad de datos por esquema:
+Ya se validó el indicador:
 
-* completitud
-* consistencia
-* cobertura real
+> **cantidad de CUIL por departamento**
+
+sobre ANSES, con salida espacial para QGIS.
+
+---
+
+## Próximo paso
+
+* replicar el mismo proceso en:
+
+  * Educación
+  * Niñez
+  * STESS
+  * Alimentar como corrida completa
+
+* consolidar un indicador territorial unificado para todo el sistema
 
 ---
 

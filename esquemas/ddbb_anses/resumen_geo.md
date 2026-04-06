@@ -27,11 +27,10 @@
 
 * **observaciones:**
 
-  * provincia viene codificada (ventaja estructural)
-  * no hay dirección (sin calle ni número)
-  * código postal es el principal ancla territorial
-  * localidad en texto libre, requiere normalización
-  * posible presencia de múltiples CUIL asociados (estructura familiar)
+  * no hay dirección
+  * provincia viene codificada, pero en catálogo propio de ANSES
+  * código postal es la clave principal del cruce territorial
+  * localidad existe, pero no se usa como clave principal
 
 ---
 
@@ -52,12 +51,11 @@
 
 ## Evaluación preliminar
 
-* **completitud esperada:** media
-* **complejidad de normalización:** baja
+* **completitud esperada:** alta
+* **complejidad de normalización:** media
 * **riesgo principal:**
 
-  * dependencia del código postal
-  * imposibilidad de geocodificación a nivel dirección
+  * diferencia entre catálogo provincial de ANSES y codificación IGN
 
 ---
 
@@ -69,6 +67,4 @@
 
 ## Siguiente paso
 
-* generar queries de calidad sobre:
-
-  * anses
+* cruce por código postal y provincia normalizada
