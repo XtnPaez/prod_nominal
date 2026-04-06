@@ -2,8 +2,6 @@
 
 ![Estado](https://img.shields.io/badge/estado-activo-brightgreen)
 ![Enfoque](https://img.shields.io/badge/enfoque-geolocalización-blue)
-![Nivel actual](https://img.shields.io/badge/nivel-departamento-orange)
-![Cobertura ANSES](https://img.shields.io/badge/ANSES-83.24%25-success)
 
 ---
 
