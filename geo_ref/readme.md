@@ -52,3 +52,16 @@ geo_ref es la base sobre la cual:
 
 * geo_work ejecuta joins
 * las bases nominales se traducen a territorio
+
+---
+
+## Estado
+
+Tablas cargadas y operativas:
+
+- provincias
+- departamentos
+- localidades (normalizadas a nivel comuna en CABA)
+- códigos postales (incluye CABA)
+
+Listas para uso en joins territoriales.

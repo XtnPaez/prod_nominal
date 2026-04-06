@@ -40,6 +40,8 @@ Tablas de referencia geográfica:
 * códigos postales
 * alias
 
+geo_ref cargado y validado para uso operativo
+
 ---
 
 ### `geo_work`
