@@ -5,6 +5,7 @@
 ![Etapa](https://img.shields.io/badge/etapa-departamento-orange)
 ![ANSES](https://img.shields.io/badge/ANSES-resuelto-success)
 ![Alimentar](https://img.shields.io/badge/Alimentar-operativo-yellow)
+![STESS](https://img.shields.io/badge/STESS-postergado-lightgrey)
 
 ---
 
@@ -80,15 +81,15 @@ Esquema reservado para análisis de consistencia por otros equipos.
 
 ### Etapa 1 — Departamento
 
-Asignación territorial por código postal.
+Asignación territorial por código postal
 
 ### Etapa 2 — Localidad
 
-Descenso a localidad en las bases que lo permitan.
+Descenso a localidad en las bases que lo permitan
 
 ### Etapa 3 — Dirección
 
-Descenso a dirección en las bases que lo permitan.
+Descenso a dirección en las bases que lo permitan
 
 ---
 
@@ -100,19 +101,17 @@ Construcción continua de tablas de alias:
 * departamentos
 * localidades
 
-Permiten acelerar la incorporación de nuevas bases.
-
 ---
 
 ## Esquemas trabajados
 
-| esquema   | nivel actual | estado    |
-| --------- | ------------ | --------- |
-| ANSES     | departamento | resuelto  |
-| Alimentar | departamento | operativo |
-| Educación | dirección    | pendiente |
-| Niñez     | departamento | pendiente |
-| STESS     | dirección    | pendiente |
+| esquema   | nivel actual | estado     |
+| --------- | ------------ | ---------- |
+| ANSES     | departamento | resuelto   |
+| Alimentar | departamento | operativo  |
+| Educación | dirección    | pendiente  |
+| Niñez     | departamento | pendiente  |
+| STESS     | —            | postergado |
 
 ---
 
@@ -121,8 +120,8 @@ Permiten acelerar la incorporación de nuevas bases.
 * `geo_ref` cargado y validado
 * pipeline ANSES resuelto
 * pipeline Alimentar operativo
+* STESS descartado para etapa actual
 * metodología definida y replicable
-* resto de esquemas pendientes de implementación
 
 ---
 
