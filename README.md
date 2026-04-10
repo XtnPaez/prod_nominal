@@ -5,6 +5,7 @@
 ![Etapa](https://img.shields.io/badge/etapa-departamento-orange)
 ![ANSES](https://img.shields.io/badge/ANSES-resuelto-success)
 ![Alimentar](https://img.shields.io/badge/Alimentar-operativo-yellow)
+![Educación](https://img.shields.io/badge/Educación-operativo-yellow)
 ![STESS](https://img.shields.io/badge/STESS-postergado-lightgrey)
 
 ---
@@ -24,7 +25,7 @@ Objetivo operativo:
 El proyecto se enfoca exclusivamente en geolocalización:
 
 * normalización de provincia
-* uso de código postal como ancla territorial
+* uso de estructuras administrativas
 * asignación de departamento
 * generación de indicadores territoriales
 
@@ -68,12 +69,11 @@ Esquema reservado para análisis de consistencia por otros equipos.
 
 ## Metodología
 
-1. extraer datos mínimos (CUIL, provincia, CP)
+1. extraer datos mínimos (CUIL, provincia, variables geo)
 2. normalizar provincia
-3. normalizar código postal
-4. cruzar con tabla de códigos postales
-5. asignar departamento
-6. medir cobertura
+3. seleccionar estrategia de asignación (CP / partido / localidad)
+4. asignar departamento
+5. medir cobertura
 
 ---
 
@@ -81,7 +81,11 @@ Esquema reservado para análisis de consistencia por otros equipos.
 
 ### Etapa 1 — Departamento
 
-Asignación territorial por código postal
+Asignación territorial usando:
+
+* código postal
+* partido/departamento
+* localidad (fallback)
 
 ### Etapa 2 — Localidad
 
@@ -101,6 +105,12 @@ Construcción continua de tablas de alias:
 * departamentos
 * localidades
 
+Permiten:
+
+* mejorar cobertura
+* normalizar nuevas bases
+* evitar reprocesos
+
 ---
 
 ## Esquemas trabajados
@@ -109,7 +119,7 @@ Construcción continua de tablas de alias:
 | --------- | ------------ | ---------- |
 | ANSES     | departamento | resuelto   |
 | Alimentar | departamento | operativo  |
-| Educación | dirección    | pendiente  |
+| Educación | departamento | operativo  |
 | Niñez     | departamento | pendiente  |
 | STESS     | —            | postergado |
 
@@ -120,6 +130,7 @@ Construcción continua de tablas de alias:
 * `geo_ref` cargado y validado
 * pipeline ANSES resuelto
 * pipeline Alimentar operativo
+* pipeline Educación operativo (en mejora)
 * STESS descartado para etapa actual
 * metodología definida y replicable
 
