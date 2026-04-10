@@ -2,14 +2,21 @@
 
 ![Estado](https://img.shields.io/badge/estado-activo-brightgreen)
 ![Enfoque](https://img.shields.io/badge/enfoque-geolocalización-blue)
+![Etapa](https://img.shields.io/badge/etapa-departamento-orange)
+![ANSES](https://img.shields.io/badge/ANSES-resuelto-success)
+![Alimentar](https://img.shields.io/badge/Alimentar-operativo-yellow)
+
+---
 
 ## Propósito
 
 Construir una infraestructura simple y robusta para asignar ubicación territorial a personas a partir de bases nominales.
 
-Objetivo operativo actual:
+Objetivo operativo:
 
 > **obtener la cantidad de CUIL por departamento**
+
+---
 
 ## Alcance
 
@@ -21,6 +28,8 @@ El proyecto se enfoca exclusivamente en geolocalización:
 * generación de indicadores territoriales
 
 No se evalúan aspectos de negocio ni consistencia general de datos.
+
+---
 
 ## Arquitectura
 
@@ -34,6 +43,10 @@ Tablas de referencia geográfica sin geometrías:
 * códigos postales
 * alias
 
+Estado: **cargado y operativo**
+
+---
+
 ### `geo_work`
 
 Tablas de trabajo:
@@ -42,9 +55,15 @@ Tablas de trabajo:
 * joins territoriales
 * agregados por departamento
 
+Estado: **operativo**
+
+---
+
 ### `ddbb_analisis`
 
 Esquema reservado para análisis de consistencia por otros equipos.
+
+---
 
 ## Metodología
 
@@ -55,20 +74,23 @@ Esquema reservado para análisis de consistencia por otros equipos.
 5. asignar departamento
 6. medir cobertura
 
+---
+
 ## Estrategia
 
-### Etapa 1
+### Etapa 1 — Departamento
 
 Asignación territorial por código postal.
-Nivel objetivo: **departamento**
 
-### Etapa 2
+### Etapa 2 — Localidad
 
 Descenso a localidad en las bases que lo permitan.
 
-### Etapa 3
+### Etapa 3 — Dirección
 
 Descenso a dirección en las bases que lo permitan.
+
+---
 
 ## Proceso transversal
 
@@ -78,24 +100,31 @@ Construcción continua de tablas de alias:
 * departamentos
 * localidades
 
-Permiten acelerar la incorporación de nuevas bases y mejorar calidad progresivamente.
+Permiten acelerar la incorporación de nuevas bases.
+
+---
 
 ## Esquemas trabajados
 
 | esquema   | nivel actual | estado    |
 | --------- | ------------ | --------- |
 | ANSES     | departamento | resuelto  |
-| Alimentar | departamento | pendiente |
+| Alimentar | departamento | operativo |
 | Educación | dirección    | pendiente |
 | Niñez     | departamento | pendiente |
 | STESS     | dirección    | pendiente |
 
+---
+
 ## Estado actual
 
-* `geo_ref` cargado y operativo
-* `geo_work` definido
-* pipeline de ANSES resuelto en el nuevo modelo
-* resto de los esquemas pendientes de implementación
+* `geo_ref` cargado y validado
+* pipeline ANSES resuelto
+* pipeline Alimentar operativo
+* metodología definida y replicable
+* resto de esquemas pendientes de implementación
+
+---
 
 ## Regla del proyecto
 
